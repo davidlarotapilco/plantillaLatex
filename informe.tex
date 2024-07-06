@@ -1,0 +1,165 @@
+\documentclass[12pt,a4paper]{article}
+
+% incluyendo paquetes
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{libreria}
+\usepackage{animate}
+
+
+\graphicspath{{C:/Users/HUAWEI/Pictures/imagesppt/}} %\incluye todos las imágenes de esa ruta
+%\graphicspath{{D:/proyectos_latex/7mo_semestre/gestion_redes/informe_de_redes/main/images}}
+\begin{document} % inicio  de documento 
+
+\include{caratula.tex} % incluyendo la caratula
+%\tableofcontents % índice automático
+\pagestyle{fancy} \mystyle \newpage % Aplicar el estilo de encabezado y pie de página
+% inicio del documento  
+\newcounter{step}
+
+\begin{figure}[h]
+    \centering
+    \animategraphics[autoplay,controls,loop,poster=first,palindrome,width=\textwidth]{1}{images/bd}{1}{2}
+    \caption{Animación de una secuencia de imágenes con opciones adicionales.}
+    \label{fig:animation}
+\end{figure}
+
+\begin{comment}
+\section{Introducción}
+Este informe describe el proceso de creación de un portal musical utilizando tecnologías web modernas. El portal permite a los usuarios buscar y visualizar información sobre diferentes artistas y álbumes. Para ello, hemos empleado XAMPP para la base de datos, y Bootstrap, HTML, PHP y JavaScript para el desarrollo del frontend y backend.
+\cite{mysql}
+\section{Configuración del Entorno}
+\subsection*{XAMPP}
+XAMPP es una distribución de Apache fácil de instalar que contiene MariaDB, PHP y Perl. Este entorno nos permite crear una base de datos local para almacenar la información musical.
+
+\subsection*{Pasos para la configuración de XAMPP}
+\begin{itemize}
+    \item Descargar e instalar XAMPP desde apachefriends.org.
+    \item Iniciar el panel de control de XAMPP y arrancar Apache y MySQL.
+    \item Acceder a \href{http://localhost/phpmyadmin}{http://localhost/phpmyadmin} para gestionar la base de datos.
+   
+\end{itemize}
+
+\subsection*{Creación de la Base de Datos}
+Paso 
+\refstepcounter{step}
+\thestep
+: En phpMyAdmin, crear una nueva base de datos llamada ``musica''.
+
+Paso 
+\refstepcounter{step} \thestep : Crear las tablas necesarias.
+\lstset{language=SQL}
+\begin{lstlisting}
+    CREATE TABLE Usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100),
+    email VARCHAR(100) UNIQUE,
+    contrasena VARCHAR(100),
+    fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE Artistas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100),
+    biografia TEXT
+);
+
+CREATE TABLE Albumes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    titulo VARCHAR(100),
+    id_artista INT,
+    ano INT,
+    FOREIGN KEY (id_artista) REFERENCES Artistas(id)
+);
+
+CREATE TABLE Generos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(50)
+);
+
+CREATE TABLE Canciones (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    titulo VARCHAR(100),
+    id_artista INT,
+    id_album INT,
+    id_genero INT,
+    ruta_mp3 VARCHAR(255),
+    FOREIGN KEY (id_artista) REFERENCES Artistas(id),
+    FOREIGN KEY (id_album) REFERENCES Albumes(id),
+    FOREIGN KEY (id_genero) REFERENCES Generos(id)
+);
+
+CREATE TABLE ListasReproduccion (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT,
+    nombre VARCHAR(100),
+    fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_usuario) REFERENCES Usuarios(id)
+);
+
+CREATE TABLE ListaCanciones (
+    id_lista INT,
+    id_cancion INT,
+    PRIMARY KEY (id_lista, id_cancion),
+    FOREIGN KEY (id_lista) REFERENCES ListasReproduccion(id),
+    FOREIGN KEY (id_cancion) REFERENCES Canciones(id)
+);
+
+\end{lstlisting}
+
+\begin{figure}[!htb]
+    \centering
+    \caption{Diseño de la base de datos} 
+    \includegraphics[width=0.9\textwidth]{images/baseD.png}
+\end{figure}
+
+\section{Desarrollo del Frontend}
+
+\subsection*{Bootstrap y HTML}
+Bootstrap facilita la creación de una interfaz de usuario atractiva y responsive. Utilizamos HTML para estructurar el contenido.
+\cite{Bootstrap}
+\subsection*{Estructura básica del HTML:}
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/portalPrincipal.png}
+    \caption{Pagina html principal} 
+\end{figure}
+
+\lstset{language=HTML}
+\lstinputlisting{project/index.html}
+
+\section{Desarrollo del Backend}
+\subsection*{PHP}
+PHP se utiliza para interactuar con la base de datos y manejar la lógica del servidor.
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.6\textwidth]{images/php.png}
+    \caption{evidencia de los archivos de php que manejan el backend} 
+\end{figure}
+\newpage
+\lstset{language=PHP}
+\lstinputlisting{project/db_config.php}
+
+
+\section{Integración de JavaScript para Mostrar Resultados}
+\subsection*{JavaScript:}
+Utilice JavaScript para manejar dinámicamente los resultados y mostrarlos en la página.
+
+\lstinputlisting{project/js/javascript.js}
+
+El usuario puede ver su lista de reproducciones donde tiene un lista de reproducciones y cada lista de reproducciones tiene lista de canciones y cada lista de canciones tiene canciones
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/lista.png}
+    \caption{Lista de reproducciones del usuario david} 
+\end{figure}
+
+
+\newpage
+\section{Referencias}
+\bibliographystyle{apacite}
+\bibliography{referencias.bib}
+
+\end{comment}
+
+\end{document}
